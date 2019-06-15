@@ -1,0 +1,16 @@
+INPUT(
+./debug/main.o
+./debug/mainwindow.o
+./debug/travelagency.o
+./debug/booking.o
+./debug/customer.o
+./debug/flightbookings.o
+./debug/hotelbookings.o
+./debug/rentalcarreservation.o
+./debug/travel.o
+./debug/bookingdialog.o
+./debug/test.o
+./debug/moc_mainwindow.o
+./debug/moc_bookingdialog.o
+./debug/moc_test.o
+);

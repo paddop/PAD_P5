@@ -1,0 +1,16 @@
+INPUT(
+./release/main.o
+./release/mainwindow.o
+./release/travelagency.o
+./release/booking.o
+./release/customer.o
+./release/flightbookings.o
+./release/hotelbookings.o
+./release/rentalcarreservation.o
+./release/travel.o
+./release/bookingdialog.o
+./release/test.o
+./release/moc_mainwindow.o
+./release/moc_bookingdialog.o
+./release/moc_test.o
+);
