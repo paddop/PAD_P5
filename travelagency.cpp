@@ -146,7 +146,7 @@ string TravelAgency::readFile()
         // Einzelne Zeilen
         // Zeilenanfang
         zeile++;
-        cout << ":: Zeile " << zeile;
+        cout << ":: Zeile \n" << zeile;
 
         // Alle
         char typ;
