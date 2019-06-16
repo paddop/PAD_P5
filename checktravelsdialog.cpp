@@ -27,7 +27,7 @@ CheckTravelsDialog::CheckTravelsDialog(QWidget *parent, TravelAgency* agency) :
         table->setItem(row, 1, new QTableWidgetItem(tr("%1").arg(
                                                         agency->getTravelByNo(row)->checkRoundTrip())));
         table->setItem(row, 2, new QTableWidgetItem(tr("%1").arg(
-                                                        QString::fromStdString(agency->findCustomer(agency->findTravel(agency->getBookingByNo(row)->getTravelId())->getCustomerId())->getName()))));
+                                                        agency->getTravelByNo(row)->checkMissingHotel())));
         table->setItem(row, 3, new QTableWidgetItem(tr("%1").arg(
                                                         agency->getBookingByNo(row)->getTravelId())));
     }

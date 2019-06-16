@@ -9,6 +9,7 @@
 #define	HEAP_H
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 struct node_data {
     int i;
@@ -19,7 +20,7 @@ struct node_data {
 class Heap {
 public:
     // Erstelle einen Heap aus dem Array a[] mit size Elementen
-    Heap(node_data a[], unsigned int size);
+    Heap(std::vector<node_data> a, unsigned int size);
     ~Heap();
     node_data pop();
     

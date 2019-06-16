@@ -4,6 +4,9 @@
 #include <vector>
 #include "booking.h"
 #include "Digraph/graph.h"
+#include "flightbookings.h"
+#include "hotelbookings.h"
+#include "rentalcarreservation.h"
 
 class Travel
 {
@@ -23,6 +26,15 @@ public:
 
     bool checkRoundTrip();
     bool checkMissingHotel();
+
+    Booking* getBookingById(int i)
+    {
+        for (Booking* b : travelBookings) {
+            if (b->getId() == i)
+                return b;
+        }
+        return nullptr;
+    }
 
 private:
     long id;

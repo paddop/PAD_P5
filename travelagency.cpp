@@ -146,7 +146,7 @@ string TravelAgency::readFile()
         // Einzelne Zeilen
         // Zeilenanfang
         zeile++;
-        cout << ":: Zeile \n" << zeile;
+        cout << ":: Zeile " << zeile << endl;
 
         // Alle
         char typ;
@@ -167,6 +167,7 @@ string TravelAgency::readFile()
         string returnLocation;
         string company;
         string insurance;
+        string insurance_tmp;
         // Nur H
         string hotel;
         string town;
@@ -228,7 +229,17 @@ string TravelAgency::readFile()
             if(returnLocation.length() == 0 || returnLocation.find('\n')!=string::npos) throw zeile;
             getline(quelle, company, '|');
             if(company.length() == 0 || company.find('\n')!=string::npos) throw zeile;
-            getline(quelle, insurance, '|');
+            /*!*/      getline(quelle, insurance_tmp, '\n');
+            if (insurance_tmp.find('|')!=string::npos) {
+                // '|' kommt vor, d.h. insurance_tmp enthält insurance UND die erste Vorgängerbuchung vA
+                stringstream sso;
+                sso << insurance_tmp;
+                getline(sso, insurance, '|');
+                sso >> vA;
+            } else {
+                // insurance_tmp enthält nur insurance
+                insurance = insurance_tmp;
+            }
             if(insurance.length() == 0 || insurance.find('\n')!=string::npos) throw zeile;
             Booking* neuesAuto = new RentalCarReservation(bookingId,travelId,price,fromDate,toDate,pickupLocation,returnLocation,company,insurance);
             bookingList.insertNode(neuesAuto);
@@ -297,25 +308,24 @@ string TravelAgency::readFile()
                 //if (thisTravel->existsNodeWithId(b->getId())) {
                 //    thisTravel->updateGraphValueOfNode(b->getId(), b);
                 //} else {
-                    thisTravel->addNodeToGraph(b->getId(), b);
+                thisTravel->addNodeToGraph(b->getId(), b);
                 //}
 
                 if (vA != -1) {
                     // Erster Vorgängerknoten
-                    if (thisTravel->existsNodeWithId(vA)) {
-                        thisTravel->addArcToGraph(vA, b->getId());
-                    } else {
+                    if (!thisTravel->existsNodeWithId(vA)) {
                         thisTravel->addNodeToGraph(vA, nullptr);
                     }
+                    thisTravel->addArcToGraph(vA, b->getId());
+
 
 
                     if (vB != -1) {
                         // Zweiter Vorgängerknoten
-                        if (thisTravel->existsNodeWithId(vB)) {
-                            thisTravel->addArcToGraph(vB, b->getId());
-                        } else {
+                        if (!thisTravel->existsNodeWithId(vB)) {
                             thisTravel->addNodeToGraph(vB, nullptr);
                         }
+                        thisTravel->addArcToGraph(vB, b->getId());
                     }
                 }
 

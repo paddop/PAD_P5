@@ -3,8 +3,8 @@
 #include <cmath>
 using namespace std;
 
-Heap::Heap(node_data a[], unsigned int size){
-    data = new node_data[size + 1];
+Heap::Heap(vector<node_data> a, unsigned int size){
+    data = new node_data[size];
     for (unsigned int i = 1; i <= size; i++){
         data[i] = a[i];
     }

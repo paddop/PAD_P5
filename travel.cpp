@@ -33,36 +33,89 @@ long Travel::getCustomerId() const
     return customerId;
 }
 
+void swap(node_data *xp, node_data *yp)
+{
+    node_data temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
+
+// A function to implement bubble sort
+void bubbleSort(vector<node_data>& arr, int n)
+{
+    int i, j;
+    for (i = 0; i < n-1; i++)
+
+        // Last i elements are already in place
+        for (j = 0; j < n-i-1; j++)
+            if (arr[j].end < arr[j+1].end)
+                swap(&arr[j], &arr[j+1]);
+}
+
 bool Travel::checkRoundTrip()
 {
-    node_data sortedArray[MAX_NODES];
+    vector<node_data> sortedArray;
     node_data node;
 
     DepthFirstSearch(*graph);
 
-    for (int i = 1; i <= MAX_NODES; i++) {
-    sortedArray[i].i = i;
-    sortedArray[i].bezeichner = graph->getVertexValue(i)->getFromDate();
-    sortedArray[i].end =
-    graph->getEnd(i);
+    for (int n = 0; n < MAX_NODES; n++) {
+        if (graph->getVertexValue(n) != nullptr) {
+            node_data neu;
+            neu.i = graph->getVertexValue(n)->getId();
+            neu.bezeichner = graph->getVertexValue(n)->getFromDate();
+            neu.end = graph->getEnd(n);
+            sortedArray.push_back(neu);
+        }
     }
 
-    Heap myHeap(sortedArray, MAX_NODES);
+    //Heap myHeap(sortedArray, sortedArray.size());
+    bubbleSort(sortedArray, sortedArray.size());
 
-    for (int i = 1; i <= MAX_NODES; i++) {
-        node = myHeap.pop();
-        cout << i << " " << setw(15) << node.bezeichner << " " << node.end << endl;
+    /*
+    for (int i = 0; i < sortedArray.size(); i++) {
+        //node = myHeap.pop();
+        node = sortedArray[i];
+        cout << i+1 << ". " << setw(15) << node.bezeichner << " " << node.end << endl;
     }
+    */
 
-    return true;
+    Flightbookings* firstFlight = static_cast<Flightbookings*>(getBookingById(sortedArray[0].i));
+    Flightbookings* lastFlight = static_cast<Flightbookings*>(getBookingById(sortedArray[sortedArray.size()-1].i));
+    bool erg = firstFlight->getFromDest() == lastFlight->getToDest();
+    cout << "Correct? " << erg;
+
+    return erg;
 }
 
 bool Travel::checkMissingHotel()
 {
-    // Topologische Sortierung
+    vector<node_data> sortedArray;
+    node_data node;
+
     DepthFirstSearch(*graph);
 
+    for (int n = 0; n < MAX_NODES; n++) {
+        if (graph->getVertexValue(n) != nullptr) {
+            node_data neu;
+            neu.i = graph->getVertexValue(n)->getId();
+            neu.bezeichner = graph->getVertexValue(n)->getFromDate();
+            neu.end = graph->getEnd(n);
+            sortedArray.push_back(neu);
+        }
+    }
 
+    bubbleSort(sortedArray, sortedArray.size());
 
+    for (int i=0; i<sortedArray.size()-1; i++) {
+        Booking* b = getBookingById(sortedArray[i].i);
+        Booking* b2 = getBookingById(sortedArray[i+1].i);
+        //Mietwagenbuchungen ignorieren
+        if (dynamic_cast<RentalCarReservation*>(b))
+            continue;
+        //Auf Lücke prüfen
+        if (b2->getFromDate() != b->getToDate())
+            return false;
+    }
     return true;
 }
