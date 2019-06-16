@@ -114,8 +114,49 @@ bool Travel::checkMissingHotel()
         if (dynamic_cast<RentalCarReservation*>(b))
             continue;
         //Auf Lücke prüfen
-        if (b2->getFromDate() != b->getToDate())
+        if (b2->getFromDate() > b->getToDate())
             return false;
+    }
+    return true;
+}
+
+bool Travel::checkNeedlessHotel()
+{
+    vector<node_data> sortedArray;
+    node_data node;
+
+    DepthFirstSearch(*graph);
+
+    for (int n = 0; n < MAX_NODES; n++) {
+        if (graph->getVertexValue(n) != nullptr) {
+            node_data neu;
+            neu.i = graph->getVertexValue(n)->getId();
+            neu.bezeichner = graph->getVertexValue(n)->getFromDate();
+            neu.end = graph->getEnd(n);
+            sortedArray.push_back(neu);
+        }
+    }
+
+    bubbleSort(sortedArray, sortedArray.size());
+
+
+    Booking* lastBooking = getBookingById(sortedArray[sortedArray.size()-1].i);
+    for (int i=0; i<sortedArray.size()-1; i++) {
+        Booking* b = getBookingById(sortedArray[i].i);
+        if (HotelBookings* hotel1 = dynamic_cast<HotelBookings*>(b)) {
+            //Hotel noch nach Rückreise gebucht?
+            if (hotel1->getToDate() > lastBooking->getFromDate())
+                return false;
+            //Fängt eine neue Gotelbuchung an bevor diese Hotelbuchung endet? (Hotel unnötig lang gebucht)
+            for (int j=i+1; j<sortedArray.size()-2; j++) {
+                Booking* b2 = getBookingById(sortedArray[j].i);
+                if (HotelBookings* hotel2 = dynamic_cast<HotelBookings*>(b2)) {
+                    // Überlappung zwischen zwei Hotelbuchungen prüfen
+                    if (hotel2->getFromDate() < hotel1->getToDate())
+                        return false;
+                }
+            }
+        }
     }
     return true;
 }

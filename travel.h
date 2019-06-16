@@ -26,6 +26,7 @@ public:
 
     bool checkRoundTrip();
     bool checkMissingHotel();
+    bool checkNeedlessHotel();
 
     Booking* getBookingById(int i)
     {
