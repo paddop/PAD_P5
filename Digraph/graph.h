@@ -259,6 +259,7 @@ void Graph<TV, maxNodes>::insertArc(int v, int w, double weight) {
         vertices[v].ord++;
         vertices[w].indegree++;
         vertices[w].ord++;
+        setPredecessor(w,v);
     }
     numArcs++;
 }

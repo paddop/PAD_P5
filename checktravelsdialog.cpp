@@ -11,8 +11,9 @@ CheckTravelsDialog::CheckTravelsDialog(QWidget *parent, TravelAgency* agency) :
     // Tabelle init
     QTableWidget* table = this->ui->tableWidget;
     table->setRowCount(0);
-    table->setColumnCount(4);
+    table->setColumnCount(5);
     table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    table->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     // Tabelle leeren
     table->clear();
@@ -22,6 +23,7 @@ CheckTravelsDialog::CheckTravelsDialog(QWidget *parent, TravelAgency* agency) :
     table->setHorizontalHeaderItem(1, new QTableWidgetItem("Roundtrip?"));
     table->setHorizontalHeaderItem(2, new QTableWidgetItem("Lückenlos?"));
     table->setHorizontalHeaderItem(3, new QTableWidgetItem("Unnötiges Hotel?"));
+    table->setHorizontalHeaderItem(4, new QTableWidgetItem("Unnötiges Auto?"));
 
     const QString STR_OK = "OK";
     const QString STR_ERR = "Fehler!";
@@ -56,6 +58,14 @@ CheckTravelsDialog::CheckTravelsDialog(QWidget *parent, TravelAgency* agency) :
             ergstring = STR_ERR;
         }
         table->setItem(row, 3, new QTableWidgetItem(tr("%1").arg(ergstring)));
+
+        // Unnötiges Auto?
+        if (agency->getTravelByNo(row)->checkNeedlessRentalCar())
+            ergstring = STR_OK;
+        else {
+            ergstring = STR_ERR;
+        }
+        table->setItem(row, 4, new QTableWidgetItem(tr("%1").arg(ergstring)));
     }
 }
 
