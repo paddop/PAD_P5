@@ -307,7 +307,7 @@ string TravelAgency::readFile()
                 // Aktueller Knoten
                 //if (thisTravel->existsNodeWithId(b->getId())) {
                 //    thisTravel->updateGraphValueOfNode(b->getId(), b);
-                //} else {
+                //} else {+
                 thisTravel->addNodeToGraph(b->getId(), b);
                 //}
 
