@@ -107,10 +107,11 @@ Graph<TV, maxNodes>::~Graph() {
 template <class TV, int maxNodes>
 void Graph<TV, maxNodes>::insertVertex(int n, TV m) {
     if (n >= 0 && n < maxNodes) {
+        if (vertices[n].living == false)
+            numVertices++;
         vertices[n].living = true;
         vertices[n].value = m;
     }
-    numVertices++;
 }
 
 template <class TV, int maxNodes>
@@ -258,6 +259,7 @@ void Graph<TV, maxNodes>::insertArc(int v, int w, double weight) {
         vertices[v].ord++;
         vertices[w].indegree++;
         vertices[w].ord++;
+        setPredecessor(w,v);
     }
     numArcs++;
 }
